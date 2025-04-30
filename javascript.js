@@ -1,7 +1,19 @@
 let humanScore = 0;
 let computerScore = 0;
-let roundsToPlay = 5;
-
+let scoreToWin = 3;
+function resetGame() {
+  const container = document.querySelector(".display");
+  container.innerHTML = "";
+  humanScore = 0;
+  computerScore = 0;
+}
+function displayText(text) {
+  const container = document.querySelector(".display");
+  const content = document.createElement("div");
+  content.classList.add("content");
+  content.textContent = text;
+  container.appendChild(content);
+}
 function getComputerChoice() {
   let choice = Math.floor(Math.random() * 3);
   if (choice == 0) return "rock";
@@ -10,30 +22,39 @@ function getComputerChoice() {
   else return "invalid computer choice";
 }
 
-function getHumanChoice(player) {
-  if (player != null) player.toLowerCase();
-  return player;
-}
-
 function playGame() {
-  humanScore = 0;
-  computerScore = 0;
-  for (let x = 0; x < roundsToPlay; x++) {
-    console.log(playRound(getHumanChoice(), getComputerChoice()));
-  }
-  console.log(calculateScore(humanScore, computerScore, roundsToPlay));
+  const btn = document.querySelectorAll(".btn");
+  btn.forEach((button) => {
+    button.addEventListener("click", () => {
+      const choice = button.classList[0];
+      if (choice == "reset") resetGame();
+      else if (humanScore == 3 || computerScore == 3)
+        displayText("Game is finished! Please press new Game!");
+      else playRound(choice, getComputerChoice());
+    });
+  });
 }
 
 function playRound(humanChoice, computerChoice) {
   humanChoice = humanChoice.toLowerCase();
   computerChoice = computerChoice.toLowerCase();
   if (humanChoice == computerChoice) return "Draw! No Score Change!";
-  return calculateWinner(humanChoice, computerChoice);
+  displayText(calculateWinner(humanChoice, computerChoice));
+  declareScore();
+  checkWinner();
 }
 
 function calculateWinner(humanChoice, computerChoice) {
-  let winMessage = "You Win! " + humanChoice + " beats " + computerChoice;
-  let loseMessage = "You Lose! " + computerChoice + " beats " + humanChoice;
+  let winMessage =
+    "You Win! " +
+    humanChoice.toUpperCase() +
+    " beats " +
+    computerChoice.toUpperCase();
+  let loseMessage =
+    "You Lose! " +
+    computerChoice.toUpperCase() +
+    " beats " +
+    humanChoice.toUpperCase();
   if (humanChoice == "rock") {
     if (computerChoice == "scissors") {
       humanScore++;
@@ -63,27 +84,17 @@ function calculateWinner(humanChoice, computerChoice) {
     }
   }
 }
-
-function calculateScore(humanScore, ComputerScore, roundsToPlay) {
-  if (humanScore == computerScore)
-    return "It's a draw!" + "both players scored " + humanScore + " points!";
-  if (humanScore > computerScore)
-    return "You won with a score of " + humanScore + " out of " + roundsToPlay;
-  else
-    return (
-      "You lost! The computer beat you by " +
-      (ComputerScore - humanScore) +
-      " points!"
-    );
+function checkWinner() {
+  if (humanScore == 3) {
+    displayText("Congratulations! You Won");
+  } else if (computerScore == 3) {
+    displayText("Game Over! You Lost!");
+  }
+}
+function declareScore() {
+  displayText(
+    "Current Score: " + humanScore + " - Human " + computerScore + " - Computer"
+  );
 }
 
-const btn = document.querySelectorAll(".btn");
-// we use the .forEach method to iterate through each button
-btn.forEach((button) => {
-  // and for each one we add a 'click' listener
-  button.addEventListener("click", () => {
-    const choice = button.classList[0];
-    getHumanChoice(choice);
-  });
-});
-// playGame();
+playGame();
