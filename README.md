@@ -1,4 +1,6 @@
-Rock Paper Scissors in browser console.
+Rock Paper Scissors
+
+This project showcases my ability to use DOM and event listeners to create an interactive page.
 
 How to play: 
 1. Visit: https://allanchen-eng.github.io/Rock-Paper-Scissors/
