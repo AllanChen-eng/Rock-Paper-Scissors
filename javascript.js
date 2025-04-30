@@ -10,19 +10,11 @@ function getComputerChoice() {
   else return "invalid computer choice";
 }
 
-function getHumanChoice() {
-  let player = prompt("Rock, Paper, or Scissors?");
+function getHumanChoice(player) {
   if (player != null) player.toLowerCase();
-  while (
-    player != "rock" &&
-    player != "paper" &&
-    player != "scissors" &&
-    player != null
-  ) {
-    player = prompt(" Invalid input. Please enter Rock, Paper, or Scissors?");
-  }
   return player;
 }
+
 function playGame() {
   humanScore = 0;
   computerScore = 0;
@@ -31,12 +23,14 @@ function playGame() {
   }
   console.log(calculateScore(humanScore, computerScore, roundsToPlay));
 }
+
 function playRound(humanChoice, computerChoice) {
   humanChoice = humanChoice.toLowerCase();
   computerChoice = computerChoice.toLowerCase();
   if (humanChoice == computerChoice) return "Draw! No Score Change!";
   return calculateWinner(humanChoice, computerChoice);
 }
+
 function calculateWinner(humanChoice, computerChoice) {
   let winMessage = "You Win! " + humanChoice + " beats " + computerChoice;
   let loseMessage = "You Lose! " + computerChoice + " beats " + humanChoice;
@@ -69,6 +63,7 @@ function calculateWinner(humanChoice, computerChoice) {
     }
   }
 }
+
 function calculateScore(humanScore, ComputerScore, roundsToPlay) {
   if (humanScore == computerScore)
     return "It's a draw!" + "both players scored " + humanScore + " points!";
@@ -81,4 +76,14 @@ function calculateScore(humanScore, ComputerScore, roundsToPlay) {
       " points!"
     );
 }
-playGame();
+
+const btn = document.querySelectorAll(".btn");
+// we use the .forEach method to iterate through each button
+btn.forEach((button) => {
+  // and for each one we add a 'click' listener
+  button.addEventListener("click", () => {
+    const choice = button.classList[0];
+    getHumanChoice(choice);
+  });
+});
+// playGame();
